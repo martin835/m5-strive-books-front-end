@@ -11,10 +11,10 @@ export default class BlogList extends Component {
   };
 
   componentDidMount = async () => {
+    const apiUrl = REACT_APP_BE_URL;
+
     try {
-      let response = await fetch(
-        "https://mk-m6-strive-books.herokuapp.com/articles"
-      );
+      let response = await fetch(`${apiUrl}/articles`);
       if (response.ok) {
         let data = await response.json();
         console.log(data);
