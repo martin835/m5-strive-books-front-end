@@ -11,7 +11,7 @@ export default class BlogList extends Component {
   };
 
   componentDidMount = async () => {
-    const apiUrl = REACT_APP_BE_URL;
+    const apiUrl = process.env.REACT_APP_BE_URL;
 
     try {
       let response = await fetch(`${apiUrl}/articles`);
