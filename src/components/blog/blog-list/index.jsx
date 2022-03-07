@@ -11,9 +11,10 @@ export default class BlogList extends Component {
   };
 
   componentDidMount = async () => {
-    
     try {
-      let response = await fetch("http://localhost:3001/articles");
+      let response = await fetch(
+        "https://mk-m6-strive-books.herokuapp.com/articles"
+      );
       if (response.ok) {
         let data = await response.json();
         console.log(data);
@@ -24,7 +25,7 @@ export default class BlogList extends Component {
       } else {
         // alert('something went wrong :(')
         this.setState({
-         /*  isLoading: false, */
+          /*  isLoading: false, */
           isError: true,
         });
       }
