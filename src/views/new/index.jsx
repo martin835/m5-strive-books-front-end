@@ -11,10 +11,16 @@ export default class NewBlogPost extends Component {
         content: "",
         title: "",
         category: "",
+        author: {
+          name: "",
+          avatar: "",
+        },
       },
+      authors: [],
     };
     /* this.handleChange = this.handleChange.bind(this); */
     this.createNewArticle = this.createNewArticle.bind(this);
+    this.fetchAuthorsData = this.fetchAuthorsData.bind(this);
   }
 
   /* handleChange(value) {
@@ -36,6 +42,7 @@ export default class NewBlogPost extends Component {
         console.log(response);
         alert("article posted!");
         this.setState({
+          ...this.state,
           article: {
             content: "",
             title: "",
@@ -59,6 +66,34 @@ export default class NewBlogPost extends Component {
       // you probably have some internet problems :(
       console.log(error);
     }
+  };
+
+  fetchAuthorsData = async () => {
+    const apiUrl = process.env.REACT_APP_BE_URL;
+
+    try {
+      let response = await fetch(`${apiUrl}/authors`);
+      if (response.ok) {
+        let data = await response.json();
+        console.log(data);
+        this.setState({
+          ...this.state,
+          authors: data,
+        });
+      } else {
+        alert("something went wrong :(");
+        /*   this.setState({
+           isLoading: false,
+          isError: true,
+        }); */
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  componentDidMount = () => {
+    this.fetchAuthorsData();
   };
 
   render() {
@@ -101,6 +136,35 @@ export default class NewBlogPost extends Component {
               <option>Category3</option>
               <option>Category4</option>
               <option>Category5</option>
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="blog-author" className="mt-3">
+            <Form.Label>Author</Form.Label>
+            <Form.Control
+              size="lg"
+              as="select"
+              value={this.state.category}
+              onChange={(e) =>
+                this.setState({
+                  article: {
+                    ...this.state.article,
+                    author: { name: e.target.value },
+                  },
+                })
+              }
+            >
+              {this.state.authors.map((author) => (
+                <option key={author.id}>
+                  {author.name} {author.surname}
+                  <input
+                    id={author.id}
+                    name="authorId"
+                    type="hidden"
+                    value={author.avatar}
+                  />
+                </option>
+              ))}
             </Form.Control>
           </Form.Group>
 
