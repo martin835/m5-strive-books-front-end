@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Navbar, Button, Modal } from "react-bootstrap";
+import { Container, Navbar, Button, Modal, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./styles.css";
@@ -8,6 +8,14 @@ import { useState, useEffect } from "react";
 const NavBar = () => {
   const [lgShow, setLgShow] = useState(false);
   const [authors, setAuthors] = useState([]);
+  const [addAuthorForm, setAddAuthorForm] = useState(false);
+  const [newAuthor, setNewAuthor] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    avatar: "",
+    dateOfBirth: "",
+  });
 
   useEffect(() => fetchAuthorsData(), []);
 
@@ -28,6 +36,45 @@ const NavBar = () => {
         }); */
       }
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addNewAuthor = async (e) => {
+    e.preventDefault();
+    try {
+      let response = await fetch("http://localhost:3001/authors", {
+        method: "POST",
+        body: JSON.stringify(newAuthor),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      if (response.ok) {
+        console.log(response);
+        alert("author posted!");
+        setNewAuthor({
+          name: "",
+          surname: "",
+          email: "",
+          avatar: "",
+          dateOfBirth: "",
+        });
+      } else {
+        // what type of error will fall here?
+        // here it means you connected to the server, but something went wrong!
+        alert("something went wrong! please try again");
+        // just some examples...
+        if (response.status === 400) {
+          alert("some data was wrong");
+        }
+        if (response.status === 400) {
+          alert("not found");
+        }
+      }
+    } catch (error) {
+      // what type of error will fall here?
+      // you probably have some internet problems :(
       console.log(error);
     }
   };
@@ -73,11 +120,129 @@ const NavBar = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {authors.map((author) => (
-            <p>
-              {author.name} {author.surname}{" "}
-            </p>
-          ))}
+          {addAuthorForm ? (
+            <Form onSubmit={(e) => addNewAuthor(e)} className="mt-5">
+              <Form.Group
+                controlId="
+              author-name"
+                className="mt-3"
+              >
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  size="lg"
+                  placeholder="Name"
+                  value={newAuthor.name}
+                  onChange={(e) =>
+                    setNewAuthor({
+                      ...newAuthor,
+                      name: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="
+              author-surname"
+                className="mt-3"
+              >
+                <Form.Label>Surname</Form.Label>
+                <Form.Control
+                  size="lg"
+                  placeholder="Surname"
+                  value={newAuthor.surname}
+                  onChange={(e) =>
+                    setNewAuthor({
+                      ...newAuthor,
+                      surname: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="
+              author-email"
+                className="mt-3"
+              >
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  size="lg"
+                  type="email"
+                  placeholder="Email"
+                  value={newAuthor.email}
+                  onChange={(e) =>
+                    setNewAuthor({
+                      ...newAuthor,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="
+              author-birthday"
+                className="mt-3"
+              >
+                <Form.Label>Date of birth</Form.Label>
+                <Form.Control
+                  size="lg"
+                  type="datetime-local"
+                  placeholder="date-of-birth"
+                  value={newAuthor.dateOfBirth}
+                  onChange={(e) =>
+                    setNewAuthor({
+                      ...newAuthor,
+                      dateOfBirth: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group
+                controlId="
+              author-email"
+                className="mt-3"
+              >
+                <Form.Label>Avatar</Form.Label>
+                <Form.Control
+                  size="lg"
+                  placeholder="URL"
+                  value={newAuthor.avatar}
+                  onChange={(e) =>
+                    setNewAuthor({
+                      ...newAuthor,
+                      avatar: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+
+              <Form.Group className="d-flex mt-3 justify-content-end">
+                <Button type="reset" size="lg" variant="outline-dark">
+                  Reset
+                </Button>
+                <Button
+                  type="submit"
+                  size="lg"
+                  variant="dark"
+                  style={{ marginLeft: "1em" }}
+                >
+                  Submit
+                </Button>
+              </Form.Group>
+            </Form>
+          ) : (
+            authors.map((author) => (
+              <p>
+                {author.name} {author.surname}{" "}
+              </p>
+            ))
+          )}
+          <Button onClick={() => setAddAuthorForm(!addAuthorForm)}>
+            Add New Author
+          </Button>
         </Modal.Body>
       </Modal>
     </>
