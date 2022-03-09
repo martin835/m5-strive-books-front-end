@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Image } from "react-bootstrap";
+import { Container, Image, Button } from "react-bootstrap";
 import { withRouter } from "react-router";
 import BlogAuthor from "../../components/blog/blog-author";
 import BlogLike from "../../components/likes/BlogLike";
@@ -38,6 +38,10 @@ const Blog = () => {
     }
   };
 
+  const downloadPDF = async () => {
+    console.log("I DON'T DOWNLOAD YET");
+  };
+
   return (
     <div className="blog-details-root">
       <Container>
@@ -58,6 +62,7 @@ const Blog = () => {
         </div>
 
         <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
+        <Button onClick={() => downloadPDF()}>Download as PDF</Button>
       </Container>
     </div>
   );
