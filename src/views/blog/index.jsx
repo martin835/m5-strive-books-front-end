@@ -6,13 +6,13 @@ import BlogLike from "../../components/likes/BlogLike";
 import posts from "../../data/posts.json";
 import "./styles.css";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const Blog = () => {
   const [article, setArticle] = useState({});
 
   const params = useParams();
-
+  const apiUrl = process.env.REACT_APP_BE_URL;
   useEffect(() => {
     fetchArticle();
   }, []);
@@ -38,9 +38,10 @@ const Blog = () => {
     }
   };
 
-  const downloadPDF = async () => {
-    console.log("I DON'T DOWNLOAD YET");
-  };
+  /* const downloadPDF = async () => {
+    const apiUrl = process.env.REACT_APP_BE_URL;
+    navigate(`${apiUrl}/files/${params.id}/downloadPdf`);
+  }; */
 
   return (
     <div className="blog-details-root">
@@ -62,7 +63,14 @@ const Blog = () => {
         </div>
 
         <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
-        <Button onClick={() => downloadPDF()}>Download as PDF</Button>
+        <Link
+          to={{
+            pathname: `${apiUrl}/files/${params.id}/downloadPdf`,
+          }}
+          target="_blank"
+        >
+          <Button>Download as PDF</Button>
+        </Link>
       </Container>
     </div>
   );
