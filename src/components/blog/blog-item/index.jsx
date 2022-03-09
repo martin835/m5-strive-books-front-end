@@ -40,7 +40,7 @@ const BlogItem = (props, { profiles }) => {
     <>
       {console.log({ cover })}
       <Card className="blog-card">
-        <Link to={`/blog/${_id}`} className="blog-link">
+        <Link to={`/article/${_id}`} className="blog-link">
           <Card.Img variant="top" src={cover} className="blog-cover" />
           <Card.Body>
             <Card.Title>{title}</Card.Title>

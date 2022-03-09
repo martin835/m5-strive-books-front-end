@@ -149,20 +149,16 @@ export default class NewBlogPost extends Component {
                 this.setState({
                   article: {
                     ...this.state.article,
-                    author: { name: e.target.value },
+                    author: this.state.authors.find(
+                      (a) => a.id === e.target.value
+                    ),
                   },
                 })
               }
             >
               {this.state.authors.map((author) => (
-                <option key={author.id}>
+                <option key={author.id} value={author.id}>
                   {author.name} {author.surname}
-                  <input
-                    id={author.id}
-                    name="authorId"
-                    type="hidden"
-                    value={author.avatar}
-                  />
                 </option>
               ))}
             </Form.Control>
