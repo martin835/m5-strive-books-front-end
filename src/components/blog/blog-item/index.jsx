@@ -38,7 +38,6 @@ const BlogItem = (props, { profiles }) => {
 
   return (
     <>
-      {console.log({ cover })}
       <Card className="blog-card">
         <Link to={`/article/${_id}`} className="blog-link">
           <Card.Img variant="top" src={cover} className="blog-cover" />

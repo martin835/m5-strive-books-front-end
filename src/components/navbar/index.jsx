@@ -42,8 +42,9 @@ const NavBar = () => {
 
   const addNewAuthor = async (e) => {
     e.preventDefault();
+    const apiUrl = process.env.REACT_APP_BE_URL;
     try {
-      let response = await fetch("http://localhost:3001/authors", {
+      let response = await fetch(`${apiUrl}/authors`, {
         method: "POST",
         body: JSON.stringify(newAuthor),
         headers: {
@@ -75,6 +76,47 @@ const NavBar = () => {
     } catch (error) {
       // what type of error will fall here?
       // you probably have some internet problems :(
+      console.log(error);
+    }
+  };
+
+  const uploadImage = async (e) => {
+    e.preventDefault();
+    const apiUrl = process.env.REACT_APP_BE_URL;
+
+    console.log(apiUrl);
+
+    const inpFile = document.getElementById("avatar-image");
+    const formData = new FormData();
+    formData.append("avatar", inpFile.files[0]);
+    console.log(inpFile.files[0]);
+
+    try {
+      let response = await fetch(`${apiUrl}/files/cloudinaryUploadAvatar`, {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        console.log(response);
+        alert("author posted!");
+        setNewAuthor({
+          name: "",
+          surname: "",
+          email: "",
+          avatar: "",
+          dateOfBirth: "",
+        });
+      } else {
+        alert("something went wrong! please try again");
+
+        if (response.status === 400) {
+          alert("some data was wrong");
+        }
+        if (response.status === 400) {
+          alert("not found");
+        }
+      }
+    } catch (error) {
       console.log(error);
     }
   };
@@ -200,7 +242,7 @@ const NavBar = () => {
                 />
               </Form.Group>
 
-              <Form.Group
+              {/*               <Form.Group
                 controlId="
               author-email"
                 className="mt-3"
@@ -216,6 +258,20 @@ const NavBar = () => {
                       avatar: e.target.value,
                     })
                   }
+                />
+              </Form.Group> */}
+
+              <Form.Group
+                controlId="
+              avatar-image"
+                className="mt-3"
+              >
+                <Form.Label>Avatar</Form.Label>
+                <Form.Control
+                  size="lg"
+                  placeholder="Upload a picture"
+                  type="file"
+                  onChange={(e) => uploadImage(e)}
                 />
               </Form.Group>
 
