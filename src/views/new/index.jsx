@@ -29,9 +29,9 @@ export default class NewBlogPost extends Component {
 
   createNewArticle = async (e) => {
     e.preventDefault();
-
+    const apiUrl = process.env.REACT_APP_BE_URL;
     try {
-      let response = await fetch("http://localhost:3001/articles", {
+      let response = await fetch(`${apiUrl}/articles`, {
         method: "POST",
         body: JSON.stringify(this.state.article),
         headers: {
