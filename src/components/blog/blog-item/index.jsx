@@ -12,19 +12,18 @@ const BlogItem = (props, { profiles }) => {
   const uploadArticleCover = async (e) => {
     e.preventDefault();
     console.log(_id);
+    const apiUrl = process.env.REACT_APP_BE_URL;
+
     const inpFile = document.getElementById("cover-image");
     const formData = new FormData();
     formData.append("cover", inpFile.files[0]);
     console.log(inpFile.files[0]);
 
     try {
-      let response = await fetch(
-        "http://localhost:3001/articles/" + _id + "/cover",
-        {
-          method: "PATCH",
-          body: formData,
-        }
-      );
+      let response = await fetch(`${apiUrl}/articles/` + _id + "/cover", {
+        method: "PATCH",
+        body: formData,
+      });
       if (response.ok) {
         let data = await response.json();
         console.log(data);
